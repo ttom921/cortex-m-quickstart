@@ -6,10 +6,12 @@ name = "{{project-name}}"
 version = "0.1.0"
 
 [dependencies]
-cortex-m = "0.6.0"
-cortex-m-rt = "0.6.10"
-cortex-m-semihosting = "0.3.3"
-panic-halt = "0.2.0"
+embedded-hal = "1.0.0"
+cortex-m = "0.7.7"             # cortex-m 核心指令集
+cortex-m-rt = "0.7.3"          # 最小遲行時，負責啟動內存初始化
+cortex-m-semihosting = "0.5.0"
+panic-halt = "0.2.0"           # 定義發生 panic 時采取立即停機的行為
+nb = "1.1.0"                   # stm32f103xx-hal 的異步阻塞模塊，用來實現時鐘等待同步
 
 # Uncomment for the panic example.
 # panic-itm = "0.4.1"
@@ -20,9 +22,10 @@ panic-halt = "0.2.0"
 # Uncomment for the device example.
 # Update `memory.x`, set target to `thumbv7em-none-eabihf` in `.cargo/config`,
 # and then use `cargo build --examples device` to build it.
-# [dependencies.stm32f3]
-# features = ["stm32f303", "rt"]
-# version = "0.7.1"
+[dependencies.stm32f1xx-hal]
+features = ["stm32f103", "rt", "medium"]
+version = "0.10.0"
+
 
 # this lets you use `cargo fix`!
 [[bin]]
@@ -32,5 +35,5 @@ bench = false
 
 [profile.release]
 codegen-units = 1 # better optimizations
-debug = true # symbols are nice and they don't increase the size on Flash
-lto = true # better optimizations
+debug = true      # symbols are nice and they don't increase the size on Flash
+lto = true        # better optimizations
