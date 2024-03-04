@@ -3,8 +3,8 @@
 Example configurations for debugging programs in-editor with VS Code.  
 This directory contains configurations for two platforms:
 
- - `LM3S6965EVB` on QEMU
- - `STM32F303x` via OpenOCD
+
+ - `STM32F103` via OpenOCD,我有修改成使用STM32F103
 
 ## Required Extensions
 
@@ -30,7 +30,7 @@ Both are configured to build the project, using the default settings from `.carg
    - Semihosting output will be written to the Output view `Adapter Output`.
    - `ITM` logging does not work with QEMU emulation.
 
-2. OpenOCD: Starts a debug session for a `STM32F3DISCOVERY` board (or any `STM32F303x` running at 8MHz).
+2. OpenOCD: Starts a debug session for a `STM32F3DISCOVERY` board (or any `STM32F103` running at 8MHz).
    - Follow the instructions above for configuring the build with `.cargo/config` and the `memory.x` linker script.
    - `ITM` output will be written to the Output view `SWO: ITM [port: 0, type: console]` output.
 
@@ -42,7 +42,7 @@ If you would like to save this debug configuration to your repository and share 
 ```sh
 git add -f .vscode/launch.json
 git add -f .vscode/tasks.json
-git add -f .vscode/*.svd
+
 ```
 
 ## Customizing for other targets
@@ -55,7 +55,7 @@ Some configurations use this to automatically find the SVD file.
 Replace this with the part number for your device.
 
 ```json
-"device": "STM32F303VCT6",
+"device": "STM32F103",
 ```
 
 ### OpenOCD Config Files
@@ -64,31 +64,14 @@ The `configFiles` property specifies a list of files to pass to OpenOCD.
 
 ```json
 "configFiles": [
-    "interface/stlink-v2-1.cfg",
-    "target/stm32f3x.cfg"
+    "interface/stlink.cfg",
+    "target/stm32f1x.cfg"
 ],
 ```
 
 See the [OpenOCD config docs][openocd-config] for more information and the [OpenOCD repository for available configuration files][openocd-repo].
 
-### SVD
 
-The SVD file is a standard way of describing all registers and peripherals of an ARM Cortex-M mCU.  
-Cortex-Debug needs this file to display the current register values for the peripherals on the device.  
-
-You can probably find the SVD for your device on the vendor's website.  
-
-
-For example, the STM32F3DISCOVERY board uses an mcu from the `STM32F303x` line of processors.  
-All the SVD files for the STM32F3 series are available on [ST's Website][stm32f3].  
-Download the [stm32f3 SVD pack][stm32f3-svd], and copy the `STM32F303.svd` file into `.vscode/`.  
-This line of the config tells the Cortex-Debug plug in where to find the file.
-
-```json
-"svdFile": "${workspaceRoot}/.vscode/STM32F303.svd",
-```
-
-For other processors, simply copy the correct `*.svd` file into the project and update the config accordingly.
 
 ### CPU Frequency
 
